@@ -44,13 +44,18 @@ tips_count %>%
   geom_col(stat="identity")
 
 
-# Frequency for Happy Hour
-tip %>% unnest_tokens(word, text, token = "ngrams", n = 2) %>% 
+# Frequency for Bigrams
+bigram_tips = tip %>% unnest_tokens(word, text, token = "ngrams", n = 2) %>% 
   separate(word, c("word1", "word2"), sep = " ") %>% 
   filter(!word1 %in% stop_words$word) %>%
   filter(!word2 %in% stop_words$word) %>% 
   unite(word,word1, word2, sep = " ") %>% 
   count(word, sort = TRUE) %>% 
-  slice(1:15) %>% 
-  ggplot() + geom_col(aes(n,reorder(word,n)), stat = "identity", fill = "#de5833") 
+  slice(1:20) %>% 
+  ggplot() + geom_col(aes(n,reorder(word,n)), stat = "identity", fill = "#de5833") +
+  xlab("Frequency of Bigrams") + ylab("Bigram")
+
+pdf(file = "Histogram of Bigrams.pdf")
+print(bigram_tips)
+dev.off()
 
