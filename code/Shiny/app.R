@@ -2,43 +2,52 @@ library(shiny)
 library(shinythemes)
 library(tidyverse)
 
-# Filter top 5 words for each business
-bigrams <- read_csv("bigrams.csv") 
-
+bigrams <- read.csv("bigrams.csv")
 
 
 ui <- fluidPage(
-  titlePanel("Bar Analysis"),
+  titlePanel("Suggestions for Bar Business Owners"),
   theme = shinytheme("superhero"),
   sidebarLayout(
     sidebarPanel(
-      textInput("business", "Business ID"),
-      helpText("Please enter your 22 character business id"),
-      helpText("If you run into any issues please contact Abby Terzis at terzis@wisc.edu for resolution")
+      textInput("business", "Please enter your unique 22 character business id",value ="EZc2myE2mYk2h9JK9qu8gw")
     ),
     mainPanel(
       tabsetPanel(tabPanel("General Information",
       fluidRow(
-        column(width = 6, helpText("general info here")),
+        column(width = 12, h4("How to Use this App"),
+               p("This purpose of this app is to provide data driven suggestions to help improve your business."),
+               p("Below you will see a boxplot that gives you an idea where you fall in respect to other businesses"),
+               p("If you run into any issues please contact Abby Terzis at terzis@wisc.edu for resolution")),
       ),
       fluidRow(
-        column(width=6, helpText("boxplot here"),plotOutput("boxplot")),
-        column(width=6, helpText("suggestions here"),textOutput("frequency")), 
+        column(width=6, h4("Where your bar falls compared to others"),plotOutput("boxplot")),
+        column(width=6, h4("Phrases in highly rated reviews"),tableOutput("relavence")) 
       )
     ),
-    tabPanel("Attribute Analysis",
-             helpText("Put model suggestions here"))
+    tabPanel("Suggestions",
+             h4("Put model suggestions here"))
     ),
   )
 )
 )
 
 
-
 server <- function(input, output){
-  output$frequency <- renderText({
-    paste0("Put suggestions here ")
-  })
+  
+    output$relavence <- renderTable({
+      bigrams %>%
+        filter(business_id == input$business) %>%
+        select(bigram) %>%
+        slice(1:5)
+        
+    })
+      
+  
+      
+   
 }
+
+
 
 shinyApp(ui, server)
