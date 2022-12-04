@@ -6,7 +6,7 @@ library(tidyverse)
 
 #runExample("02_text")
 #runExample("03_reactivity")
-#runExample("04_mpg") 
+#runExample("04_mpg")
 #runExample("06_tabsets")
 
 bars_list <- read.csv("bars_list_ca.csv")
@@ -33,7 +33,7 @@ ui <- fluidPage(
       p(" - Samach Sathitvudh (sathitvudh@wisc.edu)"),
       p(" - Jianzhuo Liu (jliu2245@wisc.edu)")
     ),
-    
+
     mainPanel(
       tabsetPanel(tabPanel("General Information",
                            fluidRow(
@@ -41,7 +41,7 @@ ui <- fluidPage(
                              br(),
                              h4(strong(textOutput("stars")),align="center"),
                              column(width=6, h4("Where your bar falls compared to others"),plotOutput("boxplot")),
-                             column(width=6, h4("Phrases in highly rated reviews"),tableOutput("relavence")) 
+                             column(width=6, h4("Phrases in highly rated reviews"),tableOutput("relavence"))
                            )
       ),
       tabPanel("Suggestions",
@@ -64,7 +64,7 @@ ui <- fluidPage(
 
 
 server <- function(input, output){
-  
+
   output$name <- renderText({
     name = bars_list %>%
       filter(business_id == input$business) %>%
@@ -72,7 +72,7 @@ server <- function(input, output){
       slice(1)
     unlist(name[1,], use.names = FALSE)
   })
-  
+
   output$stars <- renderText({
     stars = bars_list %>%
       filter(business_id == input$business) %>%
@@ -81,24 +81,24 @@ server <- function(input, output){
     stars = unlist(stars[1,], use.names = FALSE)
     paste("You earn ", stars, " /5 stars", sep = "")
   })
-  
+
   output$boxplot <-renderPlot({
     highlight = sentiment_main %>%
       filter(business_id == input$business) %>%
       select(c(business_id,keyword,`sentiment_score_%`))
-    
-    ggplot(sentiment_main, aes(x=keyword, y=`sentiment_score_%`)) + 
+
+    ggplot(sentiment_main, aes(x=keyword, y=`sentiment_score_%`)) +
       geom_boxplot() + labs(x = "Main Categories", y = "Sentiment Score") +
       geom_point(data = highlight, aes(x=keyword,y=`sentiment_score_%`), colour = "red", size = 4)
-    
+
   })
-  
+
   output$relavence <- renderTable({
     bigrams %>%
       filter(business_id == input$business) %>%
       select(bigram) %>%
       slice(1:5)
-    
+
   })
   f <- reactive({
     x1 <- ifelse(input$s1 == "True", 1, 0)
@@ -124,12 +124,12 @@ server <- function(input, output){
     paste("The predictive rating is", f())
   })
   outpt$suggestion <- renderText({
-    
+
   })
-  
-  
-  
-  
+
+
+
+
 }
 
 
