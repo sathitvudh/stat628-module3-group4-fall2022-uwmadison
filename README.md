@@ -3,7 +3,7 @@ This repository is for STAT 628 Module 3 at UW - Madison. In this project we are
 
 After finalizing results, we created a Shiny App so bar owners can evaluate our suggestions. Here is the link to our Shiny App: https://acterzis.shinyapps.io/Shiny/
 
-#Code
+# Code
 The code folder contains all of our code used throughout our analysis. 
 
 The Data Cleaning folder is where our code for data preprocessing and restructuring of data is located.
@@ -12,8 +12,8 @@ The code for conducting each analysis is in their respective folders.
 
 Finally, you can find our code for the Shiny app in this folder. 
 
-#Data
+# Data
 This is where we stored our data as we reduced and analyzed it.
 
-#Images
+# Images
 In this folder you will find all images produced from each analysis.
