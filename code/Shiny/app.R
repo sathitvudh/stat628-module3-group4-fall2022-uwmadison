@@ -34,9 +34,11 @@ server <- function(input, output)
  x15 <-ifelse((input$s3 == "True") && (input$s8 == "True"), 1, 0)
  x16 <-ifelse((input$s3 == "True") && (input$s6 == "full_bar"), 1, 0)
 r <- 1.483235 + 0.083382*x1  -0.078589*x3 -0.073331*x6 -0.145006*x8-0.156377*x10-0.178290*x11 +0.166333* x12 +0.143959* x13 -0.168094*x14 + 0.098175*x15 +0.086016* x16
-return(2.71828^(r))
+return(format(round(2.71828^(r),1),nsmall =1))
   })
- output$result <- renderPrint(f())
+ output$result <- renderText({
+   paste("The predictive rating is", f())
+ })
 
 }
 
