@@ -4,7 +4,8 @@ library(tidyverse)
 
 
 bars_list <- read.csv("bars_list_ca.csv")
-bigrams <- read.csv("bigrams.csv")
+bigrams <- read.csv("bigrams2.csv")
+top_five <- read.csv("top5_analysis.csv")
 sentiment_all <- read_csv("final_review_sentiment.csv")
 sentiment_main <- sentiment_all %>%
   filter(keyword == "food" | keyword == "drink" | keyword == "price")
@@ -21,50 +22,56 @@ ui <- fluidPage(
       p("2. General information tab: Your business overview"),
       p("3. Suggestions tab: Our recommendation to improve your business"),
       br(),
-      p("This purpose of this app is to provide data driven suggestions to help improve your business."),
+      p("The purpose of this app is to provide data driven suggestions to help improve your business."),
+      br(),
       p("If you run into any issues please contact:"),
       p(" - Abby Terzis (terzis@wisc.edu)"),
       p(" - Samach Sathitvudh (sathitvudh@wisc.edu)"),
       p(" - Jianzhuo Liu (jliu2245@wisc.edu)")
     ),
-
     mainPanel(
       tabsetPanel(tabPanel("General Information",
                            fluidRow(
                              h3(strong(textOutput("name")),align="center"),
                              br(),
                              h4(strong(textOutput("stars")),align="center"),
-                             column(width=6, h4("Where your bar falls compared to others"),plotOutput("boxplot")),
+                             column(width=6, h4("Where your bar falls compared to others:"),plotOutput("boxplot")),
                              column(width=6, h4("This is what people are raving about to others! Use this to market your bar through social media and/or posters."),
                                     tableOutput("relavence"),
-                                    h4("Take a look at the highest freq words"),
-                                    tableOutput("freq"))
-                           )
-      ),
+                                    br(),
+                                    h4("Top 5 Most Mentions"),
+                                    h4(strong(htmlOutput("freq")))
+      ))),
       tabPanel("Suggestions",
                fluidRow(
                column(width=6,
-               selectInput("s1","Businessparking is validated",choices = c("True","False")),
-               selectInput("s2","Businessparking has valet",choices = c("True","False")),
-               selectInput("s3","Lunch is good for meal",choices = c("True","False")),
-               selectInput("s4","Ambience includes touristy",choices = c("True","False")),
-               selectInput("s5","Music includes Karaoke",choices = c("True","False")),
-               selectInput("s6","Alcohol",choices = c("full_bar","beer_and_wine")),
-               selectInput("s7","Ambience includes intimate",choices = c("True","False")),
-               selectInput("s8","Ambience includes hipster",choices = c("True","False")),
-               selectInput("s9","Businessparking has street",choices = c("True","False"))),
+               selectInput("s1","Parking is validated",choices = c("True","False")),
+               selectInput("s2","Valet Parking",choices = c("True","False")),
+               selectInput("s3","Serve Lunch",choices = c("True","False")),
+               selectInput("s4","Ambience is touristy",choices = c("True","False")),
+               selectInput("s5","Karaoke",choices = c("True","False")),
+               selectInput("s6","Type of Alcohol",choices = c("full_bar","beer_and_wine")),
+               selectInput("s7","Ambience is intimate",choices = c("True","False")),
+               selectInput("s8","Ambience is hipster",choices = c("True","False")),
+               selectInput("s9","Street Parking",choices = c("True","False"))),
                column(width=6,
                h4(textOutput("instruction")),
                br(),
                h2(textOutput("result")) ,
                br(),
-               h4(textOutput("suggestion")))
+               h4(textOutput("recommendations")),
+               h4(textOutput("fix")),
+               h4(textOutput("recommendations1")),
+               h4(textOutput("recommendations2")),
+               h4(textOutput("recommendations3")),
+               h4(textOutput("recommendations4"))
                ))
-      ),
-    )
-  )
-)
+      )
+    ) 
 
+)
+)
+)
 
 server <- function(input, output){
 
@@ -103,10 +110,10 @@ server <- function(input, output){
       slice(1:5)
   })
   
-  output$freq <- renderTable ({
-    sentiment_main %>%
-   filter(business_id == input$business) %>%
-      select("sentiment_score_%", keyword)
+  output$freq <- renderUI({
+    top5 = top_five %>%
+      filter(business_id == input$business) %>%
+      select(word_list)
   })
   
   
@@ -140,9 +147,30 @@ server <- function(input, output){
     paste("You can adjust the values on the left according to your business. Be sure to scroll all the way down!")
   })
   
-  output$suggestion <- renderText ({
-    paste("Ambience, type of parking, and variety of food for lunch impact your rating.")
+  output$recommendations <- renderText({
+    paste("Recommendations:")
   })
+  output$fix <- renderText({
+    paste(
+      "If your bar validates parking, your rating will increase by 0.08")
+  })
+  output$recommendations1 <- renderText({
+    paste(
+      "If the ambience is touristy and you have a full bar, your rating will increase by 0.16")
+  })
+  output$recommendations2 <- renderText({
+    paste(
+      "If the ambience is intimate and hipster, your rating will increase by 0.14")
+  })
+  output$recommendations3 <- renderText({
+    paste(
+      "If your bar prepares good meals for lunch and the ambience is hipster, your rating will increase by 0.1")
+  })
+  output$recommendations4 <- renderText({
+    paste(
+      "If your bar prepares good meals for lunch and has a full bar, your rating will increase by 0.09")
+  })
+  
   
 
 
