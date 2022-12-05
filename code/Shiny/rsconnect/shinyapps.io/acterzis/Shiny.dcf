@@ -1,0 +1,13 @@
+name: Shiny
+title: Shiny
+username:
+account: acterzis
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 7809135
+bundleId: 6595550
+url: https://acterzis.shinyapps.io/Shiny/
+when: 1670270526.40179
+lastSyncTime: 1670270526.4018
+asMultiple: FALSE
+asStatic: FALSE
