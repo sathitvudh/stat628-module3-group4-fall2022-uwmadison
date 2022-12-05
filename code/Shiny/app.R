@@ -1,13 +1,7 @@
-#install.packages("shiny")
-#install.packages("shinythemes")
 library(shiny)
 library(shinythemes)
 library(tidyverse)
 
-#runExample("02_text")
-#runExample("03_reactivity")
-#runExample("04_mpg")
-#runExample("06_tabsets")
 
 bars_list <- read.csv("bars_list_ca.csv")
 bigrams <- read.csv("bigrams.csv")
@@ -17,7 +11,7 @@ sentiment_main <- sentiment_all %>%
 
 ui <- fluidPage(
   titlePanel("Suggestions for Bar Business Owners"),
-  theme = shinytheme("superhero"),
+  theme = shinytheme("sandstone"),
   sidebarLayout(
     sidebarPanel(
       textInput("business", "Please enter your business id",value ="EZc2myE2mYk2h9JK9qu8gw"),
@@ -41,10 +35,14 @@ ui <- fluidPage(
                              br(),
                              h4(strong(textOutput("stars")),align="center"),
                              column(width=6, h4("Where your bar falls compared to others"),plotOutput("boxplot")),
-                             column(width=6, h4("Phrases in highly rated reviews"),tableOutput("relavence"))
+                             column(width=6, h4("This is what people are raving about to others! Use this to market your bar through social media and/or posters."),
+                                    tableOutput("relavence"),
+                                    h4("Take a look at the highest freq words"),
+                                    tableOutput("freq"))
                            )
       ),
       tabPanel("Suggestions",
+               fluidRow(
                column(width=6,
                selectInput("s1","Businessparking is validated",choices = c("True","False")),
                selectInput("s2","Businessparking has valet",choices = c("True","False")),
@@ -56,7 +54,12 @@ ui <- fluidPage(
                selectInput("s8","Ambience includes hipster",choices = c("True","False")),
                selectInput("s9","Businessparking has street",choices = c("True","False"))),
                column(width=6,
-               textOutput("result"),textOutput("suggestion")))
+               h4(textOutput("instruction")),
+               br(),
+               h2(textOutput("result")) ,
+               br(),
+               h4(textOutput("suggestion")))
+               ))
       ),
     )
   )
@@ -98,8 +101,18 @@ server <- function(input, output){
       filter(business_id == input$business) %>%
       select(bigram) %>%
       slice(1:5)
-
   })
+  
+  output$freq <- renderTable ({
+    sentiment_main %>%
+   filter(business_id == input$business) %>%
+      select("sentiment_score_%", keyword)
+  })
+  
+  
+  
+  
+  
   f <- reactive({
     x1 <- ifelse(input$s1 == "True", 1, 0)
     x2 <-ifelse(input$s2 == "True", 1, 0)
@@ -123,11 +136,14 @@ server <- function(input, output){
   output$result <- renderText({
     paste("The predictive rating is", f())
   })
-  outpt$suggestion <- renderText({
-
+  output$instruction <- renderText({
+    paste("You can adjust the values on the left according to your business. Be sure to scroll all the way down!")
   })
-
-
+  
+  output$suggestion <- renderText ({
+    paste("Ambience, type of parking, and variety of food for lunch impact your rating.")
+  })
+  
 
 
 }
