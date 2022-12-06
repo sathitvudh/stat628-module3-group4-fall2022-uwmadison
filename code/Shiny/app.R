@@ -8,7 +8,7 @@ bigrams <- read.csv("bigrams2.csv")
 top_five <- read.csv("top5_analysis.csv")
 sentiment_all <- read_csv("final_review_sentiment.csv")
 sentiment_main <- sentiment_all %>%
-  filter(keyword == "food" | keyword == "drink" | keyword == "price")
+  filter(keyword == "food" | keyword == "drink" | keyword == "price"| keyword == "service")
 
 ui <- fluidPage(
   titlePanel("Suggestions for Bar Business Owners"),
@@ -147,7 +147,7 @@ server <- function(input, output){
     paste("The predictive rating is", f())
   })
   output$instruction <- renderText({
-    paste("2. Be sure to scroll all the way down!")
+    paste("2. Manually select the features you are considering. Be sure to scroll all the way down!")
   })
   
   output$title <- renderText({
@@ -155,7 +155,7 @@ server <- function(input, output){
   })
   
   output$instruction1 <- renderText({
-    paste("1. The fields on the left are pre-set and do not update automatically when you input your business ID, please adjust the fields according to the features of your bar.")
+    paste("1. This tab can be used by those who are looking to open a new bar and want to predict what kind of rating they will receive. ")
   })
   
   output$recommendations <- renderText({

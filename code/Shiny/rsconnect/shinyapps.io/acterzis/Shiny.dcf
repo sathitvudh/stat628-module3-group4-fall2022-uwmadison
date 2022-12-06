@@ -5,9 +5,9 @@ account: acterzis
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 7809135
-bundleId: 6596965
+bundleId: 6597066
 url: https://acterzis.shinyapps.io/Shiny/
-when: 1670295219.12433
-lastSyncTime: 1670295219.12434
+when: 1670297017.09198
+lastSyncTime: 1670297017.092
 asMultiple: FALSE
 asStatic: FALSE
