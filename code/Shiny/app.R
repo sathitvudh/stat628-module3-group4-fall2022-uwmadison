@@ -55,9 +55,12 @@ ui <- fluidPage(
                selectInput("s8","Ambience is hipster",choices = c("True","False")),
                selectInput("s9","Street Parking",choices = c("True","False"))),
                column(width=6,
+                      h3(textOutput("title")),
+                      h4(textOutput("instruction1")),
+                      br(),
                h4(textOutput("instruction")),
                br(),
-               h2(textOutput("result")) ,
+               h1(textOutput("result")) ,
                br(),
                h4(textOutput("recommendations")),
                h4(textOutput("fix")),
@@ -144,7 +147,15 @@ server <- function(input, output){
     paste("The predictive rating is", f())
   })
   output$instruction <- renderText({
-    paste("You can adjust the values on the left according to your business. Be sure to scroll all the way down!")
+    paste("2. Be sure to scroll all the way down!")
+  })
+  
+  output$title <- renderText({
+    paste("**Disclaimer**")
+  })
+  
+  output$instruction1 <- renderText({
+    paste("1. The fields on the left are pre-set and do not update automatically when you input your business ID, please adjust the fields according to the features of your bar.")
   })
   
   output$recommendations <- renderText({
