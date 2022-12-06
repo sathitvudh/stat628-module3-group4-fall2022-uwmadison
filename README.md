@@ -17,3 +17,8 @@ This is where we stored our data as we reduced and analyzed it.
 
 # Images
 In this folder you will find all images produced from each analysis.
+
+Team member:
+1. Abigail Terzis (terzis@wisc.edu)
+2. Samach Sathitvudh (sathitvudh@wisc.edu)
+3. Jianzhuo Liu (jliu2245@wisc.edu)
